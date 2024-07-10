@@ -1,31 +1,44 @@
 import React, { useState } from 'react';
 
 const VideoForm = ({ onAddVideo }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [url, setUrl] = useState('');
+  const [videoData, setVideoData] = useState({
+    title: '',
+    url: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setVideoData({
+      ...videoData,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddVideo({ title, description, url });
-    setTitle('');
-    setDescription('');
-    setUrl('');
+    onAddVideo(videoData);
+    setVideoData({ title: '', url: '' });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Title</label>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+        <label>Title:</label>
+        <input
+          type="text"
+          name="title"
+          value={videoData.title}
+          onChange={handleChange}
+        />
       </div>
       <div>
-        <label>Description</label>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
-      </div>
-      <div>
-        <label>URL</label>
-        <input type="url" value={url} onChange={(e) => setUrl(e.target.value)} required />
+        <label>URL:</label>
+        <input
+          type="text"
+          name="url"
+          value={videoData.url}
+          onChange={handleChange}
+        />
       </div>
       <button type="submit">Add Video</button>
     </form>

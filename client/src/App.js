@@ -5,20 +5,23 @@ import VideoForm from './components/VideoForm';
 
 function App() {
   const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const data = await getTrendingVideos();
-        setVideos(data);
-      } catch (error) {
-        console.error('Error fetching trending videos:', error);
-        setError('Failed to fetch trending videos.');
-      }
-    };
+  const fetchTrendingShorts = async () => {
+    setLoading(true);
+    try {
+      const response = await getTrendingVideos();
+      setVideos(response);
+    } catch (error) {
+      console.error('Error fetching trending videos:', error);
+      setError('Failed to fetch trending videos.');
+    }
+    setLoading(false);
+  };
 
-    fetchVideos();
+  useEffect(() => {
+    fetchTrendingShorts();
   }, []);
 
   const handleAddVideo = async (videoData) => {
@@ -29,6 +32,9 @@ function App() {
     <div className="App">
       <h1>Good Content</h1>
       {error && <p>{error}</p>}
+      <button onClick={fetchTrendingShorts} disabled={loading}>
+        {loading ? 'Loading...' : 'Generate New Videos'}
+      </button>
       <VideoForm onAddVideo={handleAddVideo} />
       <VideoList videos={videos} />
     </div>
