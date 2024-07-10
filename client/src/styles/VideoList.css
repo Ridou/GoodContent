@@ -1,0 +1,27 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin-bottom: 20px;
+  }
+  
+  .thumbnail-container {
+    cursor: pointer;
+  }
+  
+  .thumbnail {
+    --ytd-thumbnail-height: 118px;
+    --ytd-reel-item-width: var(--ytd-reel-item-compact-layout-width, 210px);
+    display: block;
+    position: relative;
+    max-width: var(--yt-horizontal-list-renderer-width, auto);
+    width: var(--ytd-reel-item-width);
+    height: var(--ytd-thumbnail-height);
+  }
+  
+  .video-player {
+    margin-top: 20px;
+  }
+  

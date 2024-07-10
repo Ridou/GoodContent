@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
@@ -10,6 +10,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -21,3 +22,29 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# logs
+logs
+*.log
+
+# OS specific files
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Generated files
+.next/
+.nuxt/
+.expo/
+.sass-cache/
+
+# Environment files
+.env
+
+# Lock files
+package-lock.json
+yarn.lock
