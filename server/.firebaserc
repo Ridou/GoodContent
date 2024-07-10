@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "goodcontent-428917"
-  }
+    "default": "goodcontent-428917",
+    "stable": "goodcontent-428917"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
