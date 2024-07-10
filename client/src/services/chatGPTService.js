@@ -7,7 +7,7 @@ export const generateContentFromVideo = async (video) => {
       title: video.title,
       description: video.description,
     });
-    return response.data.summary;
+    return response.data; // Return the entire response data
   } catch (error) {
     console.error('Error generating content:', error);
     throw error;

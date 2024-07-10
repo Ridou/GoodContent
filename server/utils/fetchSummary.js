@@ -1,8 +1,5 @@
 const axios = require('axios');
 const FormData = require('form-data');
-const fs = require('fs');
-const ytdl = require('ytdl-core');
-const admin = require('firebase-admin');
 require('dotenv').config();
 
 const API_KEYS = [
@@ -18,52 +15,11 @@ const getApiKey = () => {
   return key;
 };
 
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(require('./path/to/your/serviceAccountKey.json')),
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET
-});
-
-const bucket = admin.storage().bucket();
-
-const downloadAudio = async (videoUrl) => {
-  try {
-    const audioPath = './audio.mp3'; // Temporary file to store the audio
-    await new Promise((resolve, reject) => {
-      ytdl(videoUrl, { filter: 'audioonly' })
-        .pipe(fs.createWriteStream(audioPath))
-        .on('finish', resolve)
-        .on('error', reject);
-    });
-
-    // Upload the file to Firebase Storage
-    const [file] = await bucket.upload(audioPath, {
-      destination: `audio/${Date.now()}-audio.mp3`,
-      metadata: {
-        contentType: 'audio/mpeg'
-      }
-    });
-
-    // Get the public URL of the uploaded file
-    const audioUrl = await file.getSignedUrl({
-      action: 'read',
-      expires: '03-17-2025'
-    });
-
-    fs.unlinkSync(audioPath); // Clean up the temporary audio file
-
-    return audioUrl[0];
-  } catch (error) {
-    console.error('Error downloading audio:', error);
-    throw new Error('Audio download failed.');
-  }
-};
-
 const transcribeAudio = async (audioUrl) => {
   try {
     const audioResponse = await axios.get(audioUrl, { responseType: 'stream' });
     const form = new FormData();
-    form.append('file', audioResponse.data, { filename: 'audio.mp3' });
+    form.append('file', audioResponse.data, 'audio.mp3');
     form.append('model', 'whisper-1');
 
     const response = await axios.post(
@@ -92,7 +48,7 @@ const generateSummary = async (transcription) => {
         messages: [
           {
             role: 'system',
-            content: 'Summarize the following video content in English. Do not repeat the description, just react to the video.'
+            content: 'Be dramatic like if it was a trailer for a movie in explaining the following content from a foreign language into English. This transcription is from the audio of a short video and we need to explain the video with this information in the time alotted, so take into account that some language are slower or faster communicating than English when creating a script. Please make it short and concise. Do not repeat the description, just react to the video as if you were a curious person/viewer that is always facinated.'
           },
           {
             role: 'user',
@@ -115,15 +71,13 @@ const generateSummary = async (transcription) => {
   }
 };
 
-const generateContent = async ({ videoUrl, title, description }) => {
+const generateContent = async ({ videoUrl, title, description, audioUrl }) => {
   try {
-    console.log('Starting audio download...', videoUrl);
-    const audioUrl = await downloadAudio(videoUrl);
-    console.log('Audio downloaded. Starting transcription...', audioUrl);
+    console.log('Starting audio transcription...', audioUrl);
     const transcription = await transcribeAudio(audioUrl);
     console.log('Transcription completed. Generating summary...', transcription);
     const summary = await generateSummary(transcription);
-    console.log('Summary generated.');
+    console.log('Summary generated.', summary);
     return summary;
   } catch (error) {
     console.error('Error generating content:', error);

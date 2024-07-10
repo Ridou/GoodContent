@@ -17,7 +17,7 @@ const Workbench = ({ videoUrl, summary, onGenerateClick }) => {
         <>
           <YouTube videoId={new URLSearchParams(new URL(videoUrl).search).get('v')} opts={opts} />
           <button onClick={onGenerateClick}>Generate Summary</button>
-          {summary && <p>{summary}</p>}
+          {summary && <p className="summary">{summary}</p>}
         </>
       ) : (
         <p>No video selected</p>

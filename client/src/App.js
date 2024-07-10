@@ -39,13 +39,18 @@ function App() {
       console.log('Generating summary for video:', workbenchVideo);
       try {
         const response = await generateContentFromVideo(workbenchVideo);
-        console.log('Generated summary:', response);
-        setSummary(response.summary); // Set the generated summary
+        console.log('Generated summary response:', response);
+        setSummary(response.summary); // Set the generated summary directly
+        console.log('Summary state after setting:', response.summary); // Log the summary state after setting
       } catch (error) {
         console.error('Error generating content:', error);
       }
     }
   };
+
+  console.log('Rendering App component. Current state:');
+  console.log('workbenchVideo:', workbenchVideo);
+  console.log('summary:', summary);
 
   return (
     <div className="App">
