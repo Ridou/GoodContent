@@ -2,8 +2,8 @@ const axios = require('axios');
 require('dotenv').config();
 
 const API_KEYS = [
-  process.env.API_KEY_1,
-  process.env.API_KEY_2,
+  process.env.API_KEY_3,
+  process.env.API_KEY_4
 ];
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
 const REGION_CODES = ['CA', 'GB', 'AU', 'IN', 'JP', 'MX', 'BR']; // Removed US, added Mexico and Brazil
