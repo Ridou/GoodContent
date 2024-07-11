@@ -13,9 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: n
+      - run: npm install
+        working-directory: server
+      - run: npm run build
+        working-directory: server
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GOODCONTENT_428917 }}
           projectId: goodcontent-428917
+          entryPoint: server
