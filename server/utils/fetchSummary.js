@@ -1,10 +1,11 @@
 const axios = require('axios');
 const FormData = require('form-data');
 require('dotenv').config();
+const { getSpeechAudio } = require('./fetchSpeech');
 
 const API_KEYS = [
   process.env.OPENAI_API_KEY_1,
-  process.env.OPENAI_API_KEY_2
+  process.env.OPENAI_API_KEY_2,
 ];
 
 let apiKeyIndex = 0;
@@ -22,16 +23,12 @@ const transcribeAudio = async (audioUrl) => {
     form.append('file', audioResponse.data, 'audio.mp3');
     form.append('model', 'whisper-1');
 
-    const response = await axios.post(
-      'https://api.openai.com/v1/audio/transcriptions',
-      form,
-      {
-        headers: {
-          ...form.getHeaders(),
-          'Authorization': `Bearer ${getApiKey()}`,
-        },
-      }
-    );
+    const response = await axios.post('https://api.openai.com/v1/audio/transcriptions', form, {
+      headers: {
+        ...form.getHeaders(),
+        Authorization: `Bearer ${getApiKey()}`,
+      },
+    });
     return response.data.text;
   } catch (error) {
     console.error('Error transcribing audio with Whisper:', error.response ? error.response.data : error);
@@ -39,31 +36,31 @@ const transcribeAudio = async (audioUrl) => {
   }
 };
 
-const generateSummary = async (transcription) => {
+const toneInstructions = {
+  dramatic: 'You are a professional translator. Translate as best as possible maintaining the context...',
+  informative: 'You are a professional translator. Be informative and provide a detailed explanation. Translate as best as possible maintaining the context...',
+  humorous: 'You are a professional translator. Be humorous and add some witty comments. Translate as best as possible maintaining the context...',
+  emotional: 'You are a professional translator. Be emotional and emphasize the feelings. Translate as best as possible maintaining the context...',
+};
+
+const generateSummary = async (transcription, tone) => {
   try {
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model: 'gpt-4',
-        messages: [
-          {
-            role: 'system',
-            content: 'Be dramatic like if it was a trailer for a movie in explaining the following content from a foreign language into English. This transcription is from the audio of a short video and we need to explain the video with this information in the time alotted, so take into account that some language are slower or faster communicating than English when creating a script. Please make it short and concise. Do not repeat the description, just react to the video as if you were a curious person/viewer that is always facinated.'
-          },
-          {
-            role: 'user',
-            content: `Video transcription: ${transcription}`
-          }
-        ],
-        max_tokens: 150
+    const toneInstruction = toneInstructions[tone] || toneInstructions.dramatic;
+
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: toneInstruction },
+        { role: 'user', content: `Video transcription: ${transcription}` },
+      ],
+      max_tokens: 150,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getApiKey()}`,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getApiKey()}`,
-        },
-      }
-    );
+    });
+
     return response.data.choices[0].message.content;
   } catch (error) {
     console.error('Error generating summary with ChatGPT:', error.response ? error.response.data : error);
@@ -71,14 +68,20 @@ const generateSummary = async (transcription) => {
   }
 };
 
-const generateContent = async ({ videoUrl, title, description, audioUrl }) => {
+const generateContent = async ({ videoUrl, title, description, audioUrl, tone }) => {
   try {
     console.log('Starting audio transcription...', audioUrl);
     const transcription = await transcribeAudio(audioUrl);
     console.log('Transcription completed. Generating summary...', transcription);
-    const summary = await generateSummary(transcription);
-    console.log('Summary generated.', summary);
-    return summary;
+    const summary = await generateSummary(transcription, tone);
+    console.log('Summary generated. Fetching speech audio...', summary);
+    const speechAudioUrl = await getSpeechAudio(summary);
+    console.log('Speech audio fetched. Generating final content...', speechAudioUrl);
+
+    // Here you would add the logic to combine the video with the new audio
+    // This part is dependent on the specific video editing tools or libraries you are using
+
+    return { summary, speechAudioUrl };
   } catch (error) {
     console.error('Error generating content:', error);
     throw error;

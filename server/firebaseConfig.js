@@ -1,15 +1,16 @@
-// server/firebaseConfig.js
 const admin = require('firebase-admin');
-const firebase = require('firebase/app');
-require('firebase/storage');
+const path = require('path');
+require('dotenv').config();
 
-// Update this path to the actual path of your service account key JSON file
-const serviceAccount = require('./config/goodcontent-428917-firebase-adminsdk-yxnqd-9c03f0283a.json');
+if (!admin.apps.length) {
+  const serviceAccountPath = path.resolve(__dirname, 'config', 'goodcontent-428917-firebase-adminsdk-yxnqd-0041e990ed.json');
+  const serviceAccount = require(serviceAccountPath);
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: "goodcontent-428917.appspot.com"
-});
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  });
+}
 
 const bucket = admin.storage().bucket();
 

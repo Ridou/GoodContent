@@ -41,6 +41,7 @@ function App() {
         const response = await generateContentFromVideo(workbenchVideo);
         console.log('Generated summary response:', response);
         setSummary(response.summary); // Set the generated summary directly
+        console.log('Speech audio URL:', response.speechAudioUrl); // Log the speech audio URL
         console.log('Summary state after setting:', response.summary); // Log the summary state after setting
       } catch (error) {
         console.error('Error generating content:', error);

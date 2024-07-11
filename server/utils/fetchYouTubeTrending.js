@@ -6,7 +6,7 @@ const API_KEYS = [
   process.env.API_KEY_4
 ];
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
-const REGION_CODES = ['CA', 'GB', 'AU', 'IN', 'JP', 'MX', 'BR']; // Removed US, added Mexico and Brazil
+const REGION_CODES = ['PR', 'BR', 'RU', 'IN', 'JP', 'MX', 'KR', 'CN'];
 
 let apiKeyIndex = 0;
 let cachedVideos = [];

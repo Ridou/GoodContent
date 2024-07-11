@@ -66,7 +66,7 @@ app.post('/generate', async (req, res) => {
       // Make the file publicly accessible
       await blob.makePublic();
       const publicUrl = `https://storage.googleapis.com/${bucket.name}/${audioFileName}`;
-      const content = await generateContent({ videoUrl, title, description, audioUrl: publicUrl });
+      const content = await generateContent({ videoUrl, title, description, audioUrl: publicUrl, tone: 'dramatic' }); // Default tone set to dramatic
       console.log('Generated summary:', content); // Log the summary
       res.json({ summary: content });
 
