@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+GoodContent
+GoodContent is a project designed to curate and translate engaging content from various countries for audiences in the US. The aim is to provide easily accessible and understandable content from diverse regions.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Project Structure
+The project is organized into the following directories:
 
-## Available Scripts
+1. server
+Contains the backend code and configuration files.
 
-In the project directory, you can run:
+Main File: server.js
+Directories:
+config
+models
+routes
+tmp
+utils
+y
+2. client
+Contains the frontend code.
 
-### `npm start`
+Main Files:
+index.html (in public)
+Various JavaScript and CSS files (in src)
+Directories:
+components
+services
+styles
+3. functions
+Contains Firebase functions and related configuration.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+4. .github
+Contains workflows for GitHub Actions.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+5. Root Directory
+Contains common configuration and documentation files.
 
-### `npm test`
+Installation
+To get started with the project, follow these steps:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Clone the repository:
 
-### `npm run build`
+sh
+Copy code
+git clone https://github.com/yourusername/GoodContent.git
+cd GoodContent
+Install dependencies for both server and client:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+sh
+Copy code
+cd server
+npm install
+cd ../client
+npm install
+Running the Project
+To run the project locally:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Start the backend server:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+sh
+Copy code
+cd server
+npm start
+Start the frontend development server:
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+sh
+Copy code
+cd client
+npm start
+The frontend will typically run on http://localhost:3000 and the backend on http://localhost:5000.

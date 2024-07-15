@@ -2,6 +2,9 @@ const axios = require('axios');
 const FormData = require('form-data');
 require('dotenv').config();
 const { getSpeechAudio } = require('./fetchSpeech');
+const fs = require('fs');
+const path = require('path');
+const { exec } = require('child_process');
 
 const API_KEYS = [
   process.env.OPENAI_API_KEY_1,
@@ -68,6 +71,36 @@ const generateSummary = async (transcription, tone) => {
   }
 };
 
+const separateAudioFiles = async (inputPath, outputPath) => {
+  return new Promise((resolve, reject) => {
+    const command = `spleeter separate -i "${inputPath.replace(/\\/g, '\\\\')}" -o "${outputPath.replace(/\\/g, '\\\\')}"`;
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error separating audio: ${error.message}`);
+        console.error(`stderr: ${stderr}`);
+        reject(error);
+      } else {
+        console.log(`stdout: ${stdout}`);
+        resolve();
+      }
+    });
+  });
+};
+
+const combineAudio = async (backgroundPath, voicePath, outputPath) => {
+  return new Promise((resolve, reject) => {
+    exec(`ffmpeg -i ${backgroundPath} -i ${voicePath} -filter_complex "[0:a][1:a]amerge=inputs=2[a]" -map "[a]" -ac 2 ${outputPath}`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error combining audio: ${error.message}`);
+        reject(error);
+      } else {
+        console.log(`Audio combination output: ${stdout}`);
+        resolve();
+      }
+    });
+  });
+};
+
 const generateContent = async ({ videoUrl, title, description, audioUrl, tone }) => {
   try {
     console.log('Starting audio transcription...', audioUrl);
@@ -79,7 +112,13 @@ const generateContent = async ({ videoUrl, title, description, audioUrl, tone })
     console.log('Speech audio fetched. Generating final content...', speechAudioUrl);
 
     // Here you would add the logic to combine the video with the new audio
-    // This part is dependent on the specific video editing tools or libraries you are using
+    const audioFilePath = path.join(__dirname, '../tmp/audio.mp3');
+    const backgroundPath = path.join(__dirname, '../tmp/background.wav');
+    const voicePath = path.join(__dirname, '../tmp/voice.wav');
+    const outputPath = path.join(__dirname, '../tmp/combined_audio.mp3');
+
+    await separateAudioFiles(audioFilePath, path.join(__dirname, '../tmp'));
+    await combineAudio(backgroundPath, voicePath, outputPath);
 
     return { summary, speechAudioUrl };
   } catch (error) {
@@ -88,4 +127,4 @@ const generateContent = async ({ videoUrl, title, description, audioUrl, tone })
   }
 };
 
-module.exports = { generateContent };
+module.exports = { generateContent, separateAudioFiles, combineAudio };

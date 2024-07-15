@@ -11,6 +11,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [summary, setSummary] = useState('');
+  const [speechAudioUrl, setSpeechAudioUrl] = useState('');
 
   const fetchTrendingShorts = async () => {
     setLoading(true);
@@ -32,6 +33,7 @@ function App() {
     console.log('Selected video for workbench:', video);
     setWorkbenchVideo(video);
     setSummary(''); // Clear the summary when a new video is selected
+    setSpeechAudioUrl(''); // Clear the speech audio URL when a new video is selected
   };
 
   const handleGenerateClick = async () => {
@@ -41,7 +43,7 @@ function App() {
         const response = await generateContentFromVideo(workbenchVideo);
         console.log('Generated summary response:', response);
         setSummary(response.summary); // Set the generated summary directly
-        console.log('Speech audio URL:', response.speechAudioUrl); // Log the speech audio URL
+        setSpeechAudioUrl(response.speechAudioUrl); // Set the speech audio URL
         console.log('Summary state after setting:', response.summary); // Log the summary state after setting
       } catch (error) {
         console.error('Error generating content:', error);

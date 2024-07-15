@@ -1,9 +1,9 @@
 const admin = require('firebase-admin');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 if (!admin.apps.length) {
-  const serviceAccountPath = path.resolve(__dirname, 'config', 'goodcontent-428917-firebase-adminsdk-yxnqd-0041e990ed.json');
+  const serviceAccountPath = path.resolve(__dirname, 'config', process.env.FIREBASE_SERVICE_ACCOUNT);
   const serviceAccount = require(serviceAccountPath);
 
   admin.initializeApp({

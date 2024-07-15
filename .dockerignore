@@ -1,0 +1,12 @@
+node_modules/
+tmp/
+*.log
+.DS_Store
+*.env
+.git/
+build/
+dist/
+.vscode/
+.idea/
+Dockerfile
+docker-compose.yml

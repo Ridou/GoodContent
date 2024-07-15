@@ -48,3 +48,19 @@ Thumbs.db
 # Lock files
 package-lock.json
 yarn.lock
+
+# Dockerfile
+Dockerfile
+
+# Temporary files
+server/tmp/
+
+# Virtual environment
+server/venv/
+venv/
+
+# Pretrained models
+server/pretrained_models/
+
+# Spleeter models
+server/spleeter/*
